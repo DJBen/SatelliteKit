@@ -1,35 +1,32 @@
-/*╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
-  ║ GeoTests.swift                                                                                   ║
-  ║                                                                                                  ║
-  ║ Created by Gavin Eadie on Jun22/24        Copyright 2024 Ramsay Consulting. All rights reserved. ║
-  ╚══════════════════════════════════════════════════════════════════════════════════════════════════╝*/
+/* ╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+ ║ GeoTests.swift                                                                                   ║
+ ║                                                                                                  ║
+ ║ Created by Gavin Eadie on Jun22/24        Copyright 2024 Ramsay Consulting. All rights reserved. ║
+ ╚══════════════════════════════════════════════════════════════════════════════════════════════════╝ */
 
-import Testing
 import Foundation
 @testable import SatelliteKit
+import Testing
 
 struct GeoTests {
-
     let JD = 2_458_965.464_745_4
 
     @Test func Astro() {
-
-        let topVectorA = eci2top(julianDays: 2458905.0,
+        let topVectorA = eci2top(julianDays: 2_458_905.0,
                                  satCel: Vector(10000.0, 10000.0, 0.0),
                                  obsLLA: LatLonAlt(0.0, 0.0, 0.0))
 
-        let topVectorB = cel2top(julianDays: 2458905.0,
+        let topVectorB = cel2top(julianDays: 2_458_905.0,
                                  satCel: Vector(10000.0, 10000.0, 0.0),
-                                 obsCel: geo2xyz(julianDays: 2458905.0,
+                                 obsCel: geo2xyz(julianDays: 2_458_905.0,
                                                  geodetic: LatLonAlt(0.0, 0.0, 0.0)))
 
         #expect(topVectorA == topVectorB)
 
-        let topVectorC = topPosition(julianDays: 2458905.0,
+        let topVectorC = topPosition(julianDays: 2_458_905.0,
                                      satCel: Vector(10000.0, 10000.0, 0.0),
                                      obsLLA: LatLonAlt(0.0, 0.0, 0.0))
         print(topVectorC)
-
     }
 
     @Test func ECI_GEO() {
@@ -51,16 +48,15 @@ struct GeoTests {
     }
 
     @Test func AzEl() {
-    let azEl = azel(time: Date(), site: LatLon(45.0, -90.0), cele: RADec(0.0, 0.0))
+        let azEl = azel(time: Date(), site: LatLon(45.0, -90.0), cele: RADec(0.0, 0.0))
         print(azEl)
     }
 
     @Test func llaTest() {
-        let _ = LatLonAlt(30.0, -90.0, 500.0)
+        _ = LatLonAlt(30.0, -90.0, 500.0)
     }
 
     @Test func aedTest() {
-        let _ = AziEleDst(90.0, 45.0, 2000.0)
+        _ = AziEleDst(90.0, 45.0, 2000.0)
     }
-
 }

@@ -1,6 +1,24 @@
 # SatelliteKit
 ___Satellite Prediction Library___
 
+## Installation
+
+Add `SatelliteKit` to your project using Swift Package Manager:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/DJBen/SatelliteKit", from: "3.1.0")
+],
+targets: [
+    .target(
+        name: "YourTarget",
+        dependencies: [
+            .product(name: "SatelliteKit", package: "SatelliteKit")
+        ]
+    )
+]
+```
+
 `SatelliteKit` is a library, written in Swift, implementing the SGP4/SDP4 earth-orbiting satellite
 propagation algorithms first published in the
 [SpaceTrack Report #3](https://celestrak.com/NORAD/documentation/)
