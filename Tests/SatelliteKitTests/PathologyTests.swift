@@ -1,24 +1,21 @@
-/*╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
-  ║ PathologyTests.swift                                                                             ║
-  ║                                                                                                  ║
-  ║ Created by Gavin Eadie on Dec07/18     Copyright 2018-25 Ramsay Consulting. All rights reserved. ║
-  ╚══════════════════════════════════════════════════════════════════════════════════════════════════╝*/
+/* ╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+ ║ PathologyTests.swift                                                                             ║
+ ║                                                                                                  ║
+ ║ Created by Gavin Eadie on Dec07/18     Copyright 2018-25 Ramsay Consulting. All rights reserved. ║
+ ╚══════════════════════════════════════════════════════════════════════════════════════════════════╝ */
 
 // swiftlint:disable line_length
 // swiftlint:disable identifier_name
 
-import Testing
 import Foundation
 @testable import SatelliteKit
+import Testing
 
 // Expect(throws..) to implement?
 struct PathologyTests {
-
     struct Pathology {
-
         // # check error code 4 (0.0 ... 150.0 ... 5.00)
         func test33333() {
-
             do {
                 let tle = try Elements("",
                                        "1 33333U 05037B   05333.02012661  .25992681  00000-0  24476-3 0  1534",
@@ -27,25 +24,22 @@ struct PathologyTests {
 
                 print(String(format: "\n%5d", tle.noradIndex))
                 print("      5.0      836.362     3131.219    27739.125    0.806969   -0.303613    1.495581 <-- Vallado")
-                let     pv = try propagator.getPVCoordinates(minsAfterEpoch: 5.0)
+                let pv = try propagator.getPVCoordinates(minsAfterEpoch: 5.0)
                 print(String(format: " %8.1f %@ <-- SatKit", 5.0, pv.debugDescription()))
 
                 print("  epoch+s       r[x]         r[y]         r[z]       v[x]        v[y]        v[z]")
 
                 for mins in stride(from: 0.0, through: 150.0, by: 5.0) {
-                    let     pv = try propagator.getPVCoordinates(minsAfterEpoch: mins)
+                    let pv = try propagator.getPVCoordinates(minsAfterEpoch: mins)
                     print(String(format: " %8.1f %@", mins, pv.debugDescription()))
                 }
-
-            }
-            catch SatKitError.TLE(let error) { prettyError(error); return }
-            catch SatKitError.SGP(let error) { prettyError(error); return }
+            } catch let SatKitError.TLE(error) { prettyError(error); return }
+            catch let SatKitError.SGP(error) { prettyError(error); return }
             catch { prettyError(error.localizedDescription) }
         }
 
         // # try and check error code 2 but this ... ( 0.0->1440.0 [1.00])
         func test33334() {
-
             do {
                 let tle = try Elements("",
                                        "1 33334U 78066F   06174.85818871  .00000620  00000-0  10000-3 0  6809",
@@ -57,20 +51,17 @@ struct PathologyTests {
                 print("  epoch+s       r[x]         r[y]         r[z]       v[x]        v[y]        v[z]")
 
                 for mins in stride(from: 0.0, through: 1440.0, by: 1.0) {
-                    let     pv = try propagator.getPVCoordinates(minsAfterEpoch: mins)
+                    let pv = try propagator.getPVCoordinates(minsAfterEpoch: mins)
                     print(String(format: " %8.1f %@", mins, pv.debugDescription()))
                 }
-
-            }
-            catch SatKitError.TLE(let error) { prettyError(error); return }
-            catch SatKitError.SGP(let error) { prettyError(error); return }
+            } catch let SatKitError.TLE(error) { prettyError(error); return }
+            catch let SatKitError.SGP(error) { prettyError(error); return }
             catch { prettyError(error.localizedDescription) }
         }
 
         // # try to check error code 3 looks like ep never goes below zero,
         // # tied close to ecc (0.0->1440.0 [20.00])
         func test33335() {
-
             do {
                 let tle = try Elements("",
                                        "1 33335U 05008A   06176.46683397 -.00000205  00000-0  10000-3 0  2190",
@@ -82,19 +73,16 @@ struct PathologyTests {
                 print("  epoch+s       r[x]         r[y]         r[z]       v[x]        v[y]        v[z]")
 
                 for mins in stride(from: 0.0, through: 1440.0, by: 20.0) {
-                    let     pv = try propagator.getPVCoordinates(minsAfterEpoch: mins)
+                    let pv = try propagator.getPVCoordinates(minsAfterEpoch: mins)
                     print(String(format: " %8.1f %@", mins, pv.debugDescription()))
                 }
-
-            }
-            catch SatKitError.TLE(let error) { prettyError(error); return }
-            catch SatKitError.SGP(let error) { prettyError(error); return }
+            } catch let SatKitError.TLE(error) { prettyError(error); return }
+            catch let SatKitError.SGP(error) { prettyError(error); return }
             catch { prettyError(error.localizedDescription) }
         }
 
         // # Shows Lyddane choice at 1860 and 4700 min (  1844000.0   1845100.0        5.00)
         func test20413() {
-
             do {
                 let tle = try Elements("",
                                        "1 20413U 83020D   05363.79166667  .00000000  00000-0  00000+0 0  7041",
@@ -104,18 +92,16 @@ struct PathologyTests {
                 print(String(format: "\n%5d", tle.noradIndex))
                 print("  epoch+s       r[x]         r[y]         r[z]       v[x]        v[y]        v[z]")
 
-                for mins in stride(from: 1844000.0, through: 1845100.0, by: 5.0) {
-                    let     pv = try propagator.getPVCoordinates(minsAfterEpoch: mins)
+                for mins in stride(from: 1_844_000.0, through: 1_845_100.0, by: 5.0) {
+                    let pv = try propagator.getPVCoordinates(minsAfterEpoch: mins)
 
-                    let     string = String(format: " %8.1f %12.3f %12.3f %12.3f %11.6f %11.6f %11.6f", mins,
-                                            (pv.position.x)/1000.0, (pv.position.y)/1000.0, (pv.position.z)/1000.0,
-                                            (pv.velocity.x)/1000.0, (pv.velocity.y)/1000.0, (pv.velocity.z)/1000.0)
+                    let string = String(format: " %8.1f %12.3f %12.3f %12.3f %11.6f %11.6f %11.6f", mins,
+                                        (pv.position.x) / 1000.0, (pv.position.y) / 1000.0, (pv.position.z) / 1000.0,
+                                        (pv.velocity.x) / 1000.0, (pv.velocity.y) / 1000.0, (pv.velocity.z) / 1000.0)
                     print(string)
                 }
-
-            }
-            catch SatKitError.TLE(let error) { prettyError(error); return }
-            catch SatKitError.SGP(let error) { prettyError(error); return }
+            } catch let SatKitError.TLE(error) { prettyError(error); return }
+            catch let SatKitError.SGP(error) { prettyError(error); return }
             catch { prettyError(error.localizedDescription) }
         }
     }
@@ -128,17 +114,14 @@ struct PathologyTests {
                       "1 43700U 18090A   24234.70209558  .00000136  00000-0  00000 0 0  9992",
                       "2 43700   0.0180 170.5287 0002632  15.1180  63.4279  1.00272763 21253")
     }
-
 }
 
-
 func prettyError(_ errorText: String) {
-
     print("""
 
-        ╔═════════════════════════════════════════════════════════════════════
-        ║ »»» \(errorText) «««
-        ╚═════════════════════════════════════════════════════════════════════
+    ╔═════════════════════════════════════════════════════════════════════
+    ║ »»» \(errorText) «««
+    ╚═════════════════════════════════════════════════════════════════════
 
-        """)
+    """)
 }

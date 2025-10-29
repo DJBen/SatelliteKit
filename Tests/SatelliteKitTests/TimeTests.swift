@@ -1,17 +1,16 @@
-/*╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
-  ║ TimeTests.swift                                                                                  ║
-  ║                                                                                                  ║
-  ║ Created by Gavin Eadie on Mar31/19     Copyright 2019-25 Ramsay Consulting. All rights reserved. ║
-  ╚══════════════════════════════════════════════════════════════════════════════════════════════════╝*/
+/* ╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+ ║ TimeTests.swift                                                                                  ║
+ ║                                                                                                  ║
+ ║ Created by Gavin Eadie on Mar31/19     Copyright 2019-25 Ramsay Consulting. All rights reserved. ║
+ ╚══════════════════════════════════════════════════════════════════════════════════════════════════╝ */
 
 /// swiftlint:disable comma
 
-import Testing
 import Foundation
 @testable import SatelliteKit
+import Testing
 
 struct TimeTests {
-
 //    @Test
 //    func dateExtensions() {
 //        #expect(String(describing: TimeConstants.tleEpochReferenceDate) == "1949-12-31 00:00:00 +0000")
@@ -28,9 +27,8 @@ struct TimeTests {
         print(deg2hms(decimalDegrees: 45.0001))
         print(deg2hms(decimalDegrees: 45.00001))
         print(deg2hms(decimalDegrees: 45.000001))
-
     }
-    
+
     @Test
     func Sidereal() {
         print(String(format: "GMT MeanSiderealTime: %.2f°", zeroMeanSiderealTime(date: Date())))
@@ -45,12 +43,12 @@ struct TimeTests {
 
     @Test
     func Julian() {
-        #expect(Date(julianDate: 2433281.5).julianDate == 2433281.5)
-        #expect(Date(julianDate:      10.0).julianDate ==      10.0)
-        #expect(Date(julianDate: 4321432.1).julianDate == 4321432.1)
-        #expect(Date(julianDate: -4321432.1).julianDate == -4321432.1)
+        #expect(Date(julianDate: 2_433_281.5).julianDate == 2_433_281.5)
+        #expect(Date(julianDate: 10.0).julianDate == 10.0)
+        #expect(Date(julianDate: 4_321_432.1).julianDate == 4_321_432.1)
+        #expect(Date(julianDate: -4_321_432.1).julianDate == -4_321_432.1)
     }
-    
+
     @Test
     func JD() {
         print(julianDaysNow())
@@ -58,13 +56,13 @@ struct TimeTests {
 
     @Test
     func MJD() {
-        print(Date(mjd: 42338.9113))                // 1974-10-18 21:52:16 +0000
+        print(Date(mjd: 42338.9113)) // 1974-10-18 21:52:16 +0000
     }
 
     @Test
     func HMS() {
-        print(deg2hms(decimalDegrees:  45.0))
-        print(deg2hms(decimalDegrees:   0.0))
+        print(deg2hms(decimalDegrees: 45.0))
+        print(deg2hms(decimalDegrees: 0.0))
         print(deg2hms(decimalDegrees: -45.0))
         print(deg2hms(decimalDegrees: 360.0))
         print(deg2hms(decimalDegrees: 720.0))
@@ -80,20 +78,17 @@ struct TimeTests {
         #expect(stringHMS(hms: deg2hms(decimalDegrees: 180.5)) == "12ʰ02ᵐ00.000")
         #expect(stringHMS(hms: deg2hms(decimalDegrees: 180.555555)) == "12ʰ02ᵐ13.333")
 
-        #expect(deg2hms(decimalDegrees:  15.0) == ( 1,  0, 0.0))
+        #expect(deg2hms(decimalDegrees: 15.0) == (1, 0, 0.0))
         #expect(deg2hms(decimalDegrees: 179.5) == (11, 58, 0.0))
         #expect(deg2hms(decimalDegrees: 180.0) == (12, 0, 0.0))
 
-        print(hms2deg(hms: deg2hms(decimalDegrees: 123.456)))       // 123.45599999999..
-        print(hms2deg(hms: deg2hms(decimalDegrees: 345.678)))       //   0.67799999999..
+        print(hms2deg(hms: deg2hms(decimalDegrees: 123.456))) // 123.45599999999..
+        print(hms2deg(hms: deg2hms(decimalDegrees: 345.678))) //   0.67799999999..
     }
 
     @Test
     func Constants() {
-
         print(TimeConstants.tleEpochReferenceDate)
         print(Date(ds1950: 0.0))
-
     }
-
 }

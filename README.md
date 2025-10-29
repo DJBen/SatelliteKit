@@ -1,6 +1,24 @@
 # SatelliteKit
 ___Satellite Prediction Library___
 
+## Installation
+
+Add `SatelliteKit` to your project using Swift Package Manager:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/DJBen/SatelliteKit.git", from: "3.1.0")
+],
+targets: [
+    .target(
+        name: "YourTarget",
+        dependencies: [
+            .product(name: "SatelliteKit", package: "SatelliteKit")
+        ]
+    )
+]
+```
+
 `SatelliteKit` is a library, written in Swift, implementing the SGP4/SDP4 earth-orbiting satellite
 propagation algorithms first published in the
 [SpaceTrack Report #3](https://celestrak.com/NORAD/documentation/)
@@ -30,7 +48,19 @@ test output and the test output in the above published paper [1].
 ### Change Notes
 
 At the end of the README.
-Lastest change: Version/Tag 2.1.0 -- (2025 Aug 03)
+Lastest change: Version/Tag 2.2.0 -- (2025 Aug 13)
+
+### Important Changes • 2025 Aug 13
+
+#### API Modernization: Coordinate Types
+
+- Replaced tuple-based coordinate representations with dedicated structs:
+  - `LatLon` (latitude, longitude)
+  - `AziEle` (azimuth, elevation)
+  - `RADec` (right ascension, declination)
+- All new types are `Equatable`, `Hashable`, and `Sendable`
+- Added conversion initializers for migration from legacy tuple APIs
+- Refactored all relevant functions and tests to use new types
 
 ### Important Changes • 2025 Aug 03
 
@@ -277,7 +307,10 @@ Windows and Unix Swift enviroment briefly, but not tested rigorously.
 
 ### Author
 
+
 Translation from C++ and Java, testing and distribution by [Gavin Eadie](mailto:gavineadie.dev@icloud.com)
+
+API modernization, coordinate type refactor by [Ben Lu](https://github.com/DJBen)
 
 ---
 `version/tag 1.0.0 .. (2019 Jun 14)`
@@ -467,5 +500,12 @@ Swift 6 Sendable compatibility and Swift Testing migration
 - Migrated test suite from XCTest to Swift Testing framework
 - Preserved 100% calculation accuracy through delegation pattern
 - Added backward compatibility functions for legacy API
+
+`version/Tag 3.0.0 -- (2025 Aug 13) -- contributed by Sihao Lu`
+
+- Major API modernization: coordinate types (`LatLon`, `AziEle`, `RADec`)
+- All coordinate types are `Equatable`, `Hashable`, and `Sendable`
+- Conversion initializers for migration from legacy tuple APIs
+- Refactored all relevant functions and tests to use new types
 
 ---
