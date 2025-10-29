@@ -1,5 +1,5 @@
 # SatelliteKit
-___Satellite Prediction Library___
+___Satellite Prediction Library___ that implements SGP4 and SDP4 propagation algorithm.
 
 ## Installation
 
@@ -44,11 +44,32 @@ test output and the test output in the above published paper [1].
   much as is reasonable, the mathematical notation and Greek characters usage in the
   original 1980 Spacetrack Report._
 
+## Quick Start
 
-### Change Notes
+```swift
+let elements = try Elements("ISS (ZARYA)",
+                            "1 25544U 98067A   18039.95265046  .00001678  00000-0  32659-4 0  9999",
+                            "2 25544  51.6426 297.9871 0003401  86.7895 100.1959 15.54072469 98577")
+let satellite = Satellite(withTLE: elements)
+// Satellite's coordinate in ECI frame
+let eciPosition = try satellite.position(julianDays: julianDate)
+// This is the satellite's celetial coordinate relative to the observer
+let obsCel = geo2eci(julianDays: julianDate, geodetic: observer)
+// This is the satellite's azimuth/elevation coordinate relative to the observer
+func topVector2AziEleDst(_ top: SIMD3<Double>) -> AziEleDst {
+    let z = simd_length(top)
 
-At the end of the README.
-Lastest change: Version/Tag 2.2.0 -- (2025 Aug 13)
+    return AziEleDst(
+        atan2pi(top.y, -top.x) * rad2deg,
+        asin(top.z / z) * rad2deg,
+        z
+    )
+}
+let position = topVector2AziEleDst(
+    cel2top(julianDays: julianDate, satCel: eciPosition, obsCel: obsCel)
+)
+let distance = simd_length(eciPosition - obsCel)
+```
 
 ### Important Changes • 2025 Aug 13
 
@@ -163,38 +184,6 @@ which will return `true` if the lines are 69 characters long, format is valid, a
 Note that `line0` doesn't take part in the check so is omitted for this function, and that `formatOK` will
 emit explicit errors into the log.
 
-#### Other data formats
-
-There has been concern for some time that the three line element sets will become limited,
-not least of all because they only allow 5 digits for a object's unique NORAD numeric identifier.
-It has been proposed to provide other, less constricted, data formats.
-More information on this move will be found at
-[A New Way to Obtain GP Data (aka TLEs)](https://celestrak.com/NORAD/documentation/gp-data-formats.php)
-
-`SatelliteKit` has been changed to allow the ingestion of GP data in a JSON form .. for example, given JSON
-data, this would decode an array of `Elements` structures (I'm not catching errors in the example, but you should):
-
-```swift
-let jsonDecoder = JSONDecoder()
-jsonDecoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Micros)
-
-let tleArray = try jsonDecoder.decode([Elements].self, from: jsonData)
-print(Satellite(withTLE: tleArray[0]).debugDescription())
-print(Satellite(withTLE: tleArray[1]).debugDescription())
-print(Satellite(withTLE: tleArray[2]).debugDescription())
-```
-
-The `Elements` structure also implements `debugDescription` which will generate this formatted `String`
-
-    ┌─[elements :  0.66 days old]]──────────────────────────────────────────
-    │  ISS (ZARYA)                 25544 = 1998-067A   rev#:09857 tle#:0999
-    │     t₀:  2018-02-08 22:51:49 +0000    +24876.95265046 days after 1950
-    │
-    │    inc:  51.6426°     aop:  86.7895°    mot:  15.53899203 (rev/day)
-    │   raan: 297.9871°    anom: 100.1959°    ecc:   0.0003401
-    │                                        drag:  +3.2659e-05
-    └───────────────────────────────────────────────────────────────────────
-
 ### Satellite
 
 Having obtained the `Elements` for a satellite (a `struct` which holds only a description of the orbital
@@ -288,25 +277,13 @@ public func formatOK(_: String, _: String) -> Bool
 which checks the format of TLE lines "1" and "2" .. using a regex test, a time consuming action
 that is not performed in `preProcessTLEs`.
 
-### Inclusion
-
-`SatelliteKit` can be added to your project using the Swift Package Manager (SPM) by adding
-the dependency:
-
-```swift
-.package(url: "https://github.com/gavineadie/SatelliteKit.git", from: "1.0.0")
-```
-
-and using `import SatelliteKit` in code that needs it.
-
 ### Platforms
 
 `SatelliteKit` has been used for applications on iOS devices (iPhone, iPad and TV),
 and Macintosh computers (SwiftUI, AppKit and command line).  It has been exposed to the 
 Windows and Unix Swift enviroment briefly, but not tested rigorously.
 
-### Author
-
+### Authors
 
 Translation from C++ and Java, testing and distribution by [Gavin Eadie](mailto:gavineadie.dev@icloud.com)
 
